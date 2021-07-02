@@ -1,10 +1,12 @@
 import discord
 import os
+from dotenv import load_dotenv
 import requests
 import json
 import random
 
 client = discord.Client()
+load_dotenv()
 
 sad_words = ["lonely", "unhappy", "depressed", "sad", "alone", "anxious", "nervous", "miserable"]
 
@@ -34,4 +36,4 @@ async def on_message(message):
   if any(word in msg for word in sad_words):
     await message.channel.send(random.choice(starter_encouragements))
 
-client.run('ODYwMTYyOTYyNzAyMzM2MDgw.YN3PLw.UOn7iXruaVd38bHqUAwQbEO8N3Q')
+client.run(os.getenv('TOKEN'))
