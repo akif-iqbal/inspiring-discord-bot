@@ -8,9 +8,11 @@ import random
 client = discord.Client()
 load_dotenv()
 
-sad_words = ["lonely", "unhappy", "depressed", "sad", "alone", "anxious", "nervous", "miserable"]
+sad_words = ["lonely", "unhappy", "depressed", "sad", "alone", "anxious", "nervous", "miserable", "dejected", "hurt", "hopeless", "lonely",
+              "heartbroken", "mournful", "troubled", "sick", "painful"]
 
-starter_encouragements = ["Cheer up!", "Hang in there.", "You are a great person! ", "Stay strong buddy!"]
+starter_encouragements = ["Cheer up!", "Hang in there.", "You are a great person! ", "Stay strong buddy!", "Accept yourself.", "Be awesome!",
+                            "Chill out.", "Breathe deeply *sniffff*", "Be Yourself.", "Hold on.", "See the Good!"]
 
 def get_quote():
     response = requests.get('https://zenquotes.io/api/random')
@@ -20,6 +22,7 @@ def get_quote():
 
 @client.event
 async def on_ready():
+  await client.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game('Hi hope you are doing well!'))
   print('We have logged in as {0.user}'.format(client))
 
 @client.event
@@ -29,11 +32,15 @@ async def on_message(message):
 
   msg = message.content
 
+  if msg.startswith('$source'):
+    await message.channel.send('Here is the source code - ')
+    await message.channel.send('https://github.com/akif-iqbal/inspiring-discord-bot')
+
   if msg.startswith('$inspire'):
     quote = get_quote()
-    await message.channel.send(quote)
+    await message.reply(quote, mention_author=True)
 
   if any(word in msg for word in sad_words):
-    await message.channel.send(random.choice(starter_encouragements))
+    await message.reply(random.choice(starter_encouragements), mention_author=True)
 
 client.run(os.getenv('TOKEN'))
